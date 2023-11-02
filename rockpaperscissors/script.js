@@ -35,6 +35,19 @@ function convertToResult(num){
     };
 }
 
+function convertNumToChoice(num){
+    switch(num){
+        case 0:
+            return "ROCK";
+        case 1:
+            return "PAPER";
+        case 2:
+            return "SCISSORS";
+        default:
+            debugger;
+    }
+}
+
 //MAIN
 const winnerMatrix = [
     [0, 2, 1],
@@ -45,4 +58,4 @@ let answer = getAns();
 let NPC = generateChoice();
 let result = convertToResult(calculateWinner(answer, NPC, winnerMatrix));
 console.log(result);
-console.log("you played ", answer, " and computer played ", NPC);
+console.log("you played", convertNumToChoice(answer), "and the computer played", convertNumToChoice(NPC));
