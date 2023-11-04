@@ -1,5 +1,10 @@
 function calculateWinner(playerChoice, computerChoice){
-    const winnerMatrix = [ //0 = draw, 1 = player, 2 = computer
+    const winnerMatrix = [
+        /*
+        0 = draw, 1 = player, 2 = computer
+        y-axis for player choice in order of rock-paper-scissor
+        x-axis for computer choice in order of rock-paper-scissor
+        */
         [0, 2, 1],
         [1, 0, 2],
         [2, 1, 0]
@@ -8,36 +13,71 @@ function calculateWinner(playerChoice, computerChoice){
 }
 
 function generateComputerChoice() {
-    return Math.floor(Math.random() * 2 );
+    return Math.floor(Math.random() * 3 );
 }
 
-function convertToResult(num){
-    switch (num) {
-        case 0:
-            return "DRAW";
-        case 1:
-            return "YOU WIN";
-        case 2:
-            return "COMPUTER WINS";
-        default:
-            debugger; //should not be able to occur
-    };
+function onGamePlayed(){
+    // call functions here like events
+    refreshCounters();
 }
 
-function convertNumToChoice(num){
-    switch(num){
-        case 0:
-            return "ROCK";
-        case 1:
-            return "PAPER";
-        case 2:
-            return "SCISSORS";
-        default:
-            debugger;
+function refreshCounters(){
+    playedInfo.textContent = `Games Played:  ${thisGame.gamesPlayed}`;
+    winInfo.textContent = `Games Won: ${thisGame.gamesWon}`;
+    drawInfo.textContent = ` Games Drawn: ${thisGame.gamesDrawn}`;
+    loseInfo.textContent = `Games Lost: ${thisGame.gamesLost}`;
+}
+
+
+class game {
+    gamesPlayed;
+    gamesWon;
+    gamesLost;
+    gamesDrawn;
+    constructor(){
+        this.gamesPlayed= 0;
+        this.gamesWon = 0;
+        this.gamesLost = 0;
+        this.gamesDrawn = 0;
+    }
+
+    play(choice) {
+        let NPC = generateComputerChoice();
+        let result = calculateWinner(choice, NPC);
+        this.gamesPlayed += 1;
+        switch (Number(result)) {
+            case 0:
+                this.gamesDrawn += 1;
+                break;
+            case 1:
+                this.gamesWon += 1;
+                break;
+            case 2:
+                this.gamesLost += 1;
+                break;
+        }
+        onGamePlayed();
+    }
+
+    reset(){
+        this.gamesPlayed= 0;
+        this.gamesWon = 0;
+        this.gamesLost = 0;
+        this.gamesDrawn = 0;
+        //onReset();
     }
 }
 
 //MAIN
+const buttons = document.querySelectorAll('.playerOptions > button');
+const playedInfo = document.getElementById('playedInfo');
+const winInfo = document.getElementById('winInfo');
+const drawInfo = document.getElementById('drawInfo');
+const loseInfo = document.getElementById('loseInfo');
+var thisGame = new game;
 
-let NPC = generateComputerChoice();
-let result = calculateWinner(answer, NPC);
+buttons.forEach((node, index)=>{
+    node.addEventListener('click', () => thisGame.play(index)) //index just happens to work here. change index to button.value to make more robust
+});
+
+refreshCounters();
