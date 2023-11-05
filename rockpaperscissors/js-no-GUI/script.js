@@ -3,7 +3,7 @@ function calculateWinner(playerChoice, computerChoice, matrix){
 }
 
 function generateChoice() {
-    return Math.floor(Math.random() * 2 );
+    return Math.floor(Math.random() * 3 );
 }
 
 function getAns(){
