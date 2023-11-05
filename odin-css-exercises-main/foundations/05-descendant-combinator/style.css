@@ -1,0 +1,16 @@
+div p {
+    background-color: yellow;
+    color: red;
+    font-size: 20px;
+    text-align: center;
+}
+
+/*
+div > p
+also works, where > is the DIRECT child selector
+this would select only direct children of <div>
+
+div p
+would selected children, grandchildren, greatgrandchildren, etc
+i.e. affects any <p> within the <div>
+*/
