@@ -2,8 +2,8 @@ function calculateWinner(playerChoice, computerChoice){
     const winnerMatrix = [
         /*
         0 = draw, 1 = player, 2 = computer
-        y-axis for player choice in order of rock-paper-scissor
-        x-axis for computer choice in order of rock-paper-scissor
+        y-axis (down) for player choice in order of rock-paper-scissor
+        x-axis (across) for computer choice in order of rock-paper-scissor
         */
         [0, 2, 1],
         [1, 0, 2],
@@ -12,72 +12,66 @@ function calculateWinner(playerChoice, computerChoice){
     return (winnerMatrix[playerChoice][computerChoice]);
 }
 
-function generateComputerChoice() {
-    return Math.floor(Math.random() * 3 );
+function numToChoice(num){
+    switch (num){
+        case 0:
+            return 'ROCK';
+        case 1:
+            return 'PAPER';
+        case 2:
+            return 'SCISSORS';
+    }
 }
 
-function onGamePlayed(){
-    // call functions here like events
+function play(choice) {
+    let NPC = Math.floor(Math.random() * 3 )
+    let result = calculateWinner(choice, NPC);
+    gameInfo[0] += 1;
+    switch (Number(result)) {
+        case 0:
+            gameInfo[3] += 1; // DRAW
+            resultInfo.firstChild.textContent = "IT WAS A DRAW!";
+            break;
+        case 1:
+            gameInfo[1] += 1; // WIN
+            resultInfo.firstChild.textContent = "YOU WON!";
+            break;
+        case 2:
+            gameInfo[2] += 1; // LOSE
+            resultInfo.firstChild.textContent = "YOU LOST";
+            break;
+    }
+    refreshCounters()
+    resultInfo.lastChild.textContent = `You played ${numToChoice(choice)} and the computer played ${numToChoice(NPC)}`;
+}
+
+function resetGameInfo (){
+    for (let i = 0; i < 4; i++){
+        gameInfo[i] = 0;
+    }
+    resultInfo.textContent = '';
     refreshCounters();
 }
 
 function refreshCounters(){
-    playedInfo.textContent = `Games Played:  ${thisGame.gamesPlayed}`;
-    winInfo.textContent = `Games Won: ${thisGame.gamesWon}`;
-    drawInfo.textContent = ` Games Drawn: ${thisGame.gamesDrawn}`;
-    loseInfo.textContent = `Games Lost: ${thisGame.gamesLost}`;
+    playedInfo.textContent = `Games Played: ${gameInfo[0]}`;
+    winInfo.textContent = `Games Won: ${gameInfo[1]}`;
+    drawInfo.textContent = ` Games Drawn: ${gameInfo[3]}`;
+    loseInfo.textContent = `Games Lost: ${gameInfo[2]}`;
 }
 
-
-class game {
-    gamesPlayed;
-    gamesWon;
-    gamesLost;
-    gamesDrawn;
-    constructor(){
-        this.gamesPlayed= 0;
-        this.gamesWon = 0;
-        this.gamesLost = 0;
-        this.gamesDrawn = 0;
-    }
-
-    play(choice) {
-        let NPC = generateComputerChoice();
-        let result = calculateWinner(choice, NPC);
-        this.gamesPlayed += 1;
-        switch (Number(result)) {
-            case 0:
-                this.gamesDrawn += 1;
-                break;
-            case 1:
-                this.gamesWon += 1;
-                break;
-            case 2:
-                this.gamesLost += 1;
-                break;
-        }
-        onGamePlayed();
-    }
-
-    reset(){
-        this.gamesPlayed= 0;
-        this.gamesWon = 0;
-        this.gamesLost = 0;
-        this.gamesDrawn = 0;
-        //onReset();
-    }
-}
-
-//MAIN
+let gameInfo = [0,0,0,0] // [0] games played - [1] games won - [2] games lost - [3] games drawn
 const buttons = document.querySelectorAll('.playerOptions > button');
+const resetButton = document.getElementById('resetButton');
+const resultInfo = document.querySelector('.resultInfo')
 const playedInfo = document.getElementById('playedInfo');
 const winInfo = document.getElementById('winInfo');
 const drawInfo = document.getElementById('drawInfo');
 const loseInfo = document.getElementById('loseInfo');
-var thisGame = new game;
 
 buttons.forEach((node, index)=>{
-    node.addEventListener('click', () => thisGame.play(index)) //index just happens to work here. change index to button.value to make more robust
+    node.addEventListener('click', () => play(index)) //index just happens to work here. change index to button.value to make more robust
 });
+resetButton.addEventListener('click', () => resetGameInfo())
 
 refreshCounters();

@@ -1,4 +1,47 @@
+html {
+    height: 100%;
+}
+
 body {
     color: white;
-    background-color: black;
+    min-height: 100%;
+    background-color: #121212;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 100px;
+}
+
+.header {
+    background-color: #424242;
+    top: 0;
+    position: fixed;
+    width: 100%;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.footer {
+    background-color: #424242;
+    bottom: 0;
+    position: fixed;
+    width: 100%;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.playerOptions button {
+    width: 200px;
+    height: 100px;
+}
+
+.playerOptions {
+    display: flex;
+    justify-content: center;
+    gap: 50px;
 }
